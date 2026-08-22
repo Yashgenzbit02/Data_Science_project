@@ -1,0 +1,35 @@
+import numpy as np  
+truth_table = np.array([ 
+    [0, 0, 0], 
+    [0, 0, 1], 
+    [0, 1, 0], 
+    [0, 1, 1], 
+    [1, 0, 0], 
+    [1, 0, 1], 
+    [1, 1, 0], 
+    [1, 1, 1], 
+],dtype=np.uint8) 
+print("-------- Input Truth Table Matrix (8x3)------ ") 
+print("  A B C") 
+print(truth_table) 
+ 
+A = truth_table[:,0] 
+B = truth_table[:,1] 
+C = truth_table[:,2] 
+ 
+alarn_method_A = (A&B) | (B&C) | (A&C) 
+ 
+sensor_sum = np.sum(truth_table,axis=1) 
+alarn_method_B = (sensor_sum >= 2).astype(np.uint8) 
+ 
+is_identical = np.array_equal(alarn_method_A, alarn_method_B) 
+ 
+print("---------- Logic Evaluation -----------") 
+print(f"Active sensor counts per Row : {sensor_sum}") 
+print(f"Evaluated Alarm Output : {alarn_method_B}") 
+print(f"Both Logic Methods Matches? {is_identical}\n") 
+full_circuit_table = np.column_stack((truth_table, alarn_method_B)) 
+print("------------Complete Circuit Varification Table ------------") 
+print(" A   B  C | ALARAM") 
+for row in full_circuit_table : 
+print(f" {row[0]}   {row[1]}  {row[2]} |    {row[3]}") 
